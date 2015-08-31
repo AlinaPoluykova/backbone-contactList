@@ -1,14 +1,14 @@
 (function ($) {
  
     var contacts = [
-        { name: "Contact 1", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: 'none' },
-        { name: "Contact 2", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "family" },
-        { name: "Contact 3", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "friend" },
-        { name: "Contact 4", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "colleague" },
-        { name: "Contact 5", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "none" },
-        { name: "Contact 6", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "colleague" },
-        { name: "Contact 7", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "friend" },
-        { name: "Contact 8", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "family" }
+        { name: "Contact 1", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: ['family'] },
+        { name: "Contact 2", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: ['friend'] },
+        { name: "Contact 3", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: ['colleague'] },
+        { name: "Contact 4", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com"},
+        { name: "Contact 5", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: ['friend'] },
+        { name: "Contact 6", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com"},
+        { name: "Contact 7", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com"},
+        { name: "Contact 8", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com"}
     ];
 
     var Contact = Backbone.Model.extend({
@@ -18,7 +18,7 @@
             address: "",
             tel: "",
             email: "",
-            type: "none"
+            type: ['none']
         }
 
     });
@@ -49,7 +49,7 @@
         },
 
         deleteContact: function(){
-            var removedType = this.model.get('type')[0].toLowerCase();
+            var removedType = this.model.get('type');
             this.model.destroy();
             this.remove();
 
@@ -135,7 +135,14 @@
         addToGroup: function(){
             var selectedGroup = this.$el.find(".selectedGroup").val();
             console.log(selectedGroup);
-            this.model.set('type', selectedGroup);
+
+            // var _units = this.model.get('units');
+            // _units.push($('#addUnit').val());
+            // this.model.set({ 'units' : _units });
+
+            var types = this.model.get('type');
+            types.push(selectedGroup);
+            this.model.set({'type': types})
             this.render();
 
         }
@@ -175,7 +182,7 @@
 
         getTypes: function(){
             return _.uniq(this.collection.pluck('type'), false, function (type){
-                return type.toLowerCase();
+                return type
             });
         },
         createSelect: function(){
@@ -185,8 +192,8 @@
             });
             _.each(this.getTypes(), function (item){
                 var option = $('<option/>', {
-                    value: item.toLowerCase(),
-                    text: item.toLowerCase()
+                    value: item,
+                    text: item
                 }).appendTo(select);
             });
             return select;
