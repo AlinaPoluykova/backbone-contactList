@@ -28,3 +28,5 @@ header:after { content:""; display:block; height:0; visibility:hidden; clear:bot
 .contact-container .address { width:395px; margin-right:0; }
 .contact-container .tel { width:90px; }
 .contact-container form button { margin:5px 0 0; }
+button.addToGroup { float: none; display: block;}
+#confirmAdd { display:  none; }

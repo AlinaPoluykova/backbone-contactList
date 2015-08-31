@@ -1,11 +1,11 @@
 (function ($) {
  
     var contacts = [
-        { name: "Contact 1", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "family" },
+        { name: "Contact 1", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: 'none' },
         { name: "Contact 2", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "family" },
         { name: "Contact 3", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "friend" },
         { name: "Contact 4", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "colleague" },
-        { name: "Contact 5", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "family" },
+        { name: "Contact 5", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "none" },
         { name: "Contact 6", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "colleague" },
         { name: "Contact 7", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "friend" },
         { name: "Contact 8", address: "1, a street, a town, a city, AB12 3CD", tel: "0123456789", email: "anemail@me.com", type: "family" }
@@ -18,7 +18,7 @@
             address: "",
             tel: "",
             email: "",
-            type: ""
+            type: "none"
         }
 
     });
@@ -43,11 +43,13 @@
             "click button.edit": "editContact",
             "click button.save": "saveEdits",
             "click button.cancel": "cancelEdit",
-            "change select.type": "addType"
+            "change select.type": "addType",
+            "click button.addToGroup": "showSelectGroup",
+            "click #confirmAdd": "addToGroup"
         },
 
         deleteContact: function(){
-            var removedType = this.model.get('type').toLowerCase();
+            var removedType = this.model.get('type')[0].toLowerCase();
             this.model.destroy();
             this.remove();
 
@@ -68,7 +70,6 @@
 
         },
         addType: function(){
-            console.log('add type');
             if (this.select.val() === 'addType'){
                 this.select.remove();
 
@@ -124,6 +125,20 @@
             this.render();
 
         },
+
+        showSelectGroup: function(){
+            directory.createSelect().addClass('selectedGroup').insertAfter(this.$el.find(".addToGroup"));
+            this.$el.find('#confirmAdd').slideToggle();
+
+        },
+
+        addToGroup: function(){
+            var selectedGroup = this.$el.find(".selectedGroup").val();
+            console.log(selectedGroup);
+            this.model.set('type', selectedGroup);
+            this.render();
+
+        }
 
     });
 
